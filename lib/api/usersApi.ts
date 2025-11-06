@@ -1,7 +1,7 @@
 import { User } from "@/types/user";
-import { lehlehkaApi } from "./api";
+import { nextServerApi } from "./api";
 
 export async function getUser(): Promise<User> {
-  const res = await lehlehkaApi.get("/users/me");
+  const res = await nextServerApi.get("/users/me");
   return res.data;
 }

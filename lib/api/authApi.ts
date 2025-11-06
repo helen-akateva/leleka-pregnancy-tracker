@@ -1,10 +1,10 @@
-import { lehlehkaApi } from "./api";
+import { nextServerApi } from "./api";
 
 export interface SessionResponse {
   success: boolean;
 }
 
-export async function checkSession(): Promise<SessionResponse> {
-  const res = await lehlehkaApi.get("/auth/session");
+export async function checkServerSession(): Promise<SessionResponse> {
+  const res = await nextServerApi.get("/auth/session");
   return res.data;
 }
