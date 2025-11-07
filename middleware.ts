@@ -5,11 +5,8 @@ import { cookies } from "next/headers";
 import { parse } from "cookie";
 import { checkServerSession } from "./lib/api/serverApi";
 
-// const privateRoutes = ["/profile"];
-// const publicRoutes = ["/sign-in", "/sign-up"];
-
-const privateRoutes = [""];
-const publicRoutes = [""];
+const privateRoutes = ["/profile"];
+const publicRoutes = ["/auth/login", "/auth/register"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -72,7 +69,7 @@ export async function middleware(request: NextRequest) {
 
     // приватний маршрут — редірект на сторінку входу
     if (isPrivateRoute) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
@@ -92,5 +89,5 @@ export async function middleware(request: NextRequest) {
 // };
 
 export const config = {
-  matcher: [],
+  matcher: ["/profile/:path*", "/auth/:path*"],
 };

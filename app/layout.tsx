@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Comfortaa, Lato } from "next/font/google";
 import "./globals.css";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lato = Lato({
   subsets: ["latin"],
+  weight: ["400", "300", "700", "900"],
+  variable: "--font-family",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const comfortaa = Comfortaa({
+  subsets: ["cyrillic"],
+  weight: ["700"],
+  variable: "--second-family",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${lato.variable} ${comfortaa.variable}`}>
         <TanStackProvider>
           <AuthProvider>{children}</AuthProvider>
         </TanStackProvider>

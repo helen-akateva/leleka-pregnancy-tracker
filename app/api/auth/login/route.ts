@@ -34,6 +34,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   } catch (error) {
     if (isAxiosError(error)) {
+      const status = error.response?.status;
+
+      if (status === 401) {
+        return NextResponse.json(
+          {
+            error:
+              "Помилка в назві пошти, паролі або ж такого користувача не існує",
+          },
+          { status: 401 }
+        );
+      }
+
+      if (status === 422 || status === 400) {
+        return NextResponse.json(
+          { error: "Невалідні дані, перевірте введену пошту або ж ім`я" },
+          { status }
+        );
+      }
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },

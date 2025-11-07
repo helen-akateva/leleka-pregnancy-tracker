@@ -29,12 +29,28 @@ export async function POST(req: NextRequest) {
         if (parsed.refreshToken)
           cookieStore.set("refreshToken", parsed.refreshToken, options);
       }
-      return NextResponse.json(apiRes.data, { status: apiRes.status });
+      return NextResponse.json(apiRes.status);
     }
 
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   } catch (error) {
     if (isAxiosError(error)) {
+      const status = error.response?.status;
+
+      if (status === 409) {
+        return NextResponse.json(
+          { error: "Користувач вже існує, cпробуйте щось унікальніше" },
+          { status: 409 }
+        );
+      }
+
+      if (status === 422 || status === 400) {
+        return NextResponse.json(
+          { error: "Невалідні дані, перевірте введену пошту або ж ім`я" },
+          { status }
+        );
+      }
+
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },

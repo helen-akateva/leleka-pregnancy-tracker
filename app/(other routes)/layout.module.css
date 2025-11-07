@@ -1,0 +1,18 @@
+.main {
+  margin: 0 auto;
+  display: flex;
+  height: 100vh;
+}
+
+.nav-wrapper {
+  padding: 24px 20px 0px;
+  width: 375px;
+  height: 24px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 1440px) {
+  .nav-wrapper {
+    background-color: rgb(73, 73, 31);
+  }
+}
