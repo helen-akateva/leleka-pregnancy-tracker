@@ -27,7 +27,7 @@ const breadcrumbMap: Record<
     { label: "Нотатка " + decodeURIComponent(id) }, // можна замінити на назву з API
   ],
 
-  "/journey/[id]": ({ id }) => [{ label: "Подорож", href: "/journey" }],
+  "/journey/[id]": () => [{ label: "Подорож", href: "/journey" }],
 };
 
 // Функція для визначення ключа шаблону маршруту
