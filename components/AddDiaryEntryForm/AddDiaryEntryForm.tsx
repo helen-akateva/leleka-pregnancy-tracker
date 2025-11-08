@@ -1,0 +1,140 @@
+"use client";
+
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from "formik";
+import { useId } from "react";
+import * as Yup from "yup";
+import Select from "../SelectComponent/Select";
+
+import css from "./AddDiaryEntryForm.module.css";
+import { Emotion, fetchEmotions } from "@/lib/api/clientApi";
+
+interface DiaryValues {
+  title: string;
+  categories: string[];
+  description: string;
+}
+
+const initialValues: DiaryValues = {
+  title: "",
+  categories: [],
+  description: "",
+};
+
+const diaryValidationSchema = Yup.object().shape({
+  title: Yup.string()
+    .required("Введіть заголовок")
+    .max(100, "Максимум 100 символів"),
+  categories: Yup.array().min(1, "Оберіть хоча б одну категорію"),
+  description: Yup.string()
+    .required("Поле запису не може бути порожнім")
+    .max(1000, "Максимум 1000 символів"),
+});
+
+export default function AddDiaryEntryForm() {
+  const fieldId = useId();
+
+  const handleSubmit = (
+    values: DiaryValues,
+    actions: FormikHelpers<DiaryValues>
+  ) => {
+    console.log("Order data:", values);
+    actions.resetForm();
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validationSchema={diaryValidationSchema}
+    >
+      <Form className={css.form}>
+        <h2 className={css.title}>Новий запис</h2>
+
+        <div className={css.formGroup}>
+          <label className={css.labelText} htmlFor={`${fieldId}-title`}>
+            Заголовок
+          </label>
+          <Field name="title">
+            {({ field, meta }: FieldProps<string, DiaryValues>) => (
+              <input
+                {...field}
+                type="text"
+                id={`${fieldId}-title`}
+                placeholder="Введіть заголовок запису"
+                className={`${css.textInputTitle} ${
+                  meta.touched && meta.error ? css.inputError : ""
+                }`}
+              />
+            )}
+          </Field>
+          <ErrorMessage className={css.error} name="title" component="span" />
+        </div>
+
+        <div className={css.formGroup}>
+          <label className={css.labelText} htmlFor={`${fieldId}-categories`}>
+            Категорії
+          </label>
+
+          <Field name="categories">
+            {({ field, form, meta }: FieldProps<Emotion[]>) => (
+              <Select
+                placeholder="Оберіть категорію"
+                name={field.name}
+                value={field.value}
+                onChange={(value) => form.setFieldValue(field.name, value)}
+                loadOptions={async () => {
+                  const { emotions } = await fetchEmotions();
+                  return emotions;
+                }}
+                isMulti
+                getOptionValue={(emotion) => emotion._id}
+                getOptionLabel={(emotion) => emotion.title}
+                hasError={meta.touched && !!meta.error}
+              />
+            )}
+          </Field>
+          <ErrorMessage
+            name="categories"
+            component="span"
+            className={css.error}
+          />
+        </div>
+
+        <div className={css.formGroup}>
+          <label className={css.labelText} htmlFor={`${fieldId}-description`}>
+            Запис
+          </label>
+          <Field name="description">
+            {({ field, meta }: FieldProps<string, DiaryValues>) => (
+              <textarea
+                {...field}
+                id={`${fieldId}-description`}
+                placeholder="Запишіть, як ви себе відчуваєте"
+                className={`${css.textInputTextArea} ${
+                  meta.touched && meta.error ? css.inputError : ""
+                }`}
+              />
+            )}
+          </Field>
+
+          <ErrorMessage
+            className={css.error}
+            name="description"
+            component="span"
+          />
+        </div>
+
+        <button className={css.button} type="submit">
+          Зберегти
+        </button>
+      </Form>
+    </Formik>
+  );
+}

@@ -3,8 +3,13 @@
 import Image from "next/image";
 import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
+import { useState } from "react";
+import AddDiaryEntryModal from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
+import AddDiaryEntryForm from "@/components/AddDiaryEntryForm/AddDiaryEntryForm";
 
 export default function DiaryList() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   return (
     <section className={css["diary-list-container"]}>
       <div className={css["diary-list-block"]}>
@@ -12,6 +17,12 @@ export default function DiaryList() {
           <div className={css["diary-header-left-content"]}>Ваші записи</div>
           <div className={css["diary-header-right-content"]}>
             <div>Новий запис</div>
+            <button onClick={() => setIsModalOpen(true)}>+</button>
+            {isModalOpen && (
+              <AddDiaryEntryModal onClose={() => setIsModalOpen(false)}>
+                <AddDiaryEntryForm />
+              </AddDiaryEntryModal>
+            )}
             <Image
               src="/add_icon.svg"
               width={24}

@@ -16,6 +16,11 @@ interface UserLoginData {
   password: string;
 }
 
+export interface Emotion {
+  _id: string;
+  title: string;
+}
+
 // Аутентифікація
 
 export async function registerUser(userData: UserRegisterData) {
@@ -41,5 +46,17 @@ export async function getUser(): Promise<UserData> {
 
 export async function checkServerSession(): Promise<SessionResponse> {
   const res = await nextServerApi.get("/auth/session");
+  return res.data;
+}
+
+export async function fetchEmotions(): Promise<{
+  emotions: Emotion[];
+  limit: number;
+  page: number;
+  totalCount: number;
+  totalPages: number;
+}> {
+  const res = await nextServerApi.get("/emotions");
+
   return res.data;
 }
