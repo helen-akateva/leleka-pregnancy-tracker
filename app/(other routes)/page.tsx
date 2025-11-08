@@ -1,11 +1,22 @@
 import GreetingBlock from "@/components/DashboardPage/GreetingBlock/GreetingBlock";
 import styles from "./page.module.css";
+import StatusBlock from "@/components/Dashboard/StatusBlock/StatusBlock";
+import BabyTodayCard from "@/components/Dashboard/BabyTodayCard/BabyTodayCard";
+import MomTipCard from "@/components/Dashboard/MomTipCard/MomTipCard";
+import Header from "@/components/MainLayout/Header/Header";
+import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      <GreetingBlock />
-      Сторінка Головна мій день
+      <main className={styles.main}>
+        <Header />
+        <GreetingBlock />
+        <StatusBlock />
+        <BabyTodayCard />
+        <MomTipCard />
+        <ConfirmationModal />
+      </main>
     </div>
   );
 }

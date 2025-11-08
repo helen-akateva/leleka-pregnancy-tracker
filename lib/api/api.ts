@@ -2,7 +2,12 @@ import axios, { AxiosError } from "axios";
 
 export type ApiError = AxiosError<{ error: string }>;
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:3002" ||
+  "http://localhost:3001";
+
 export const nextServerApi = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL + "/api",
+  baseURL: API_URL + "/api",
   withCredentials: true,
 });
