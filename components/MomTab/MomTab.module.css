@@ -1,0 +1,169 @@
+.momTabContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 24px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.infoForMomBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.howYouCanFeel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 24px;
+  background-color: #fff4f6;
+}
+
+.advicesTitle {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: #000;
+  margin: 0;
+}
+
+.feelingsList {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feelingTag {
+  background-color: #e5d8dc;
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: "Lato", sans-serif;
+}
+
+.sensationDescription {
+  color: #333;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "Lato", sans-serif;
+  margin: 0;
+}
+
+.advices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 24px;
+  background-color: #fff4f6;
+}
+
+.advicesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.adviceItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.iconTitleAdvice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adviceIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.adviceCategory {
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: "Lato", sans-serif;
+  color: #000;
+}
+
+.comfortTips {
+  max-height: 48px;
+  overflow-y: auto;
+  color: #333;
+  margin: 0;
+  margin-left: 32px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "Lato", sans-serif;
+}
+
+@media screen and (min-width: 768px) {
+  .momTabContainer {
+    grid-template-columns: 1fr;
+
+    padding: 24px;
+  }
+
+  .howYouCanFeel,
+  .advices {
+    padding: 24px;
+    border-radius: 32px;
+  }
+}
+
+@media screen and (min-width: 1128px) {
+  .momTabContainer {
+    grid-template-columns: 1.7fr 1.5fr;
+
+    align-items: start;
+    padding: 32px;
+    gap: 32px;
+  }
+
+  .infoForMomBlock {
+    flex: 1;
+    max-width: 650px;
+  }
+
+  .advicesTitle {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .adviceCategory {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .sensationDescription,
+  .comfortTips {
+    font-size: 16px;
+  }
+
+  .howYouCanFeel {
+    height: 194px;
+  }
+
+  .sensationDescription {
+    overflow-y: scroll;
+  }
+}
