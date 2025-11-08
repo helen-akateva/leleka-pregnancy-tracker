@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import css from "./OnboardingAvatar.module.css";
 
-
 export default function ProfileAvatar() {
   const [error, setError] = useState("");
   const user = useAuthStore((state) => state.user);
@@ -14,17 +13,18 @@ export default function ProfileAvatar() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click(); 
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const updatedUser = await uploadImage(file);
+        const { user: updatedUser } = await uploadImage(file);
+        console.log(updatedUser);
         setUser({
           ...user,
-          ...updatedUser, 
+          ...updatedUser,
         });
       } catch (error) {
         setError((error as ApiError).message);

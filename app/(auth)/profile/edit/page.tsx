@@ -7,7 +7,7 @@ import styles from "./OnboardingPage.module.css";
 import Link from "next/link";
 import OnboardingForm from "@/components/OnboardingForm/OnboardingForm";
 
-export default function EditProfilePage() {
+export default function OnboardingProfilePage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 

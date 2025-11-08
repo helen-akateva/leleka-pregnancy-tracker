@@ -52,7 +52,7 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
     actions: FormikHelpers<OnboardingFormValues>
   ) => {
     try {
-      const { updatedUser } = await updateUser(values);
+      const { user: updatedUser } = await updateUser(values);
       setUser({
         ...user,
         ...updatedUser,
