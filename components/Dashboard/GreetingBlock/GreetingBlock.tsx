@@ -1,30 +1,30 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-
 import css from "./GreetingBlock.module.css";
-import { getCurrentUser } from "@/lib/api/user";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function GreetingBlock() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["currentUser"],
-    queryFn: getCurrentUser,
-  });
+  const { user, isLoading, isError } = useAuth();
+
+  //   useQuery({
+  //   queryKey: ["currentUser"],
+  //   queryFn: getCurrentUser,
+  // });
 
   if (isLoading) {
     return <p className={css.loading}>Loading...</p>;
   }
 
-  if (isError || !data?.name) {
+  if (isError || !user?.name) {
     return (
       <div className={css.block}>
-        <p className={css.error}>Не вдалося завантажити ім&#39;я користувача</p>
+        <p className={css.error}>Доброго дня!</p>
       </div>
     );
   }
   return (
     <div className={css.block}>
-      <h2 className={css.title}>Доброго ранку, {data?.name}!</h2>
+      <h2 className={css.title}>Доброго ранку, {user?.name}!</h2>
     </div>
   );
 }
