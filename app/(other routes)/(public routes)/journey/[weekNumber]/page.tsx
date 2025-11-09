@@ -22,6 +22,7 @@ export default function JourneyPage() {
     queryKey: ['greeting', isAuthenticated],
     queryFn: () => getGreeting(isAuthenticated),
     enabled: isAuthenticated === true, 
+    staleTime: 10 * 60 * 1000,
   });
 
   useEffect(() => {

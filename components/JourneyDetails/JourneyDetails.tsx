@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-
 import css from "./JourneyDetails.module.css";
 import { useJourneyStore } from "@/lib/store/journeyStore";
 import { getBabyDetails, getMomDetails } from "@/lib/api/clientApi";
@@ -22,7 +21,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
   } = useQuery({
     queryKey: ["baby", weekNumber],
     queryFn: () => getBabyDetails(weekNumber),
-    enabled: activeTab === "baby" && weekNumber > 0,
+    enabled: weekNumber > 0,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -33,7 +32,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
   } = useQuery({
     queryKey: ["mom", weekNumber],
     queryFn: () => getMomDetails(weekNumber),
-    enabled: activeTab === "mom" && weekNumber > 0,
+    enabled: weekNumber > 0,
     staleTime: 5 * 60 * 1000,
   });
 
