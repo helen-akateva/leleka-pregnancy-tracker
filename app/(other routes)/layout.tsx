@@ -19,7 +19,6 @@ export default function HomeLayout({
         <SideBar />
         <div className={css["main-content"]}>
           <Breadcrumbs />
-
           {children}
           <ConfirmationModal />
         </div>
