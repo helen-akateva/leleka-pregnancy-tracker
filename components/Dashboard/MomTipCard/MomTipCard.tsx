@@ -27,6 +27,7 @@ export default function MomTipCard() {
 
   return (
     <div className={css.card}>
+      <h3 className={css.title}>Порада для мами</h3>
       <p className={css.text}>{momHint}</p>
     </div>
   );

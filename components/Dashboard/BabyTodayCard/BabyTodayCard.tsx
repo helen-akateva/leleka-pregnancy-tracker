@@ -45,13 +45,18 @@ export default function BabyTodayCard() {
         )}
 
         <div className={css.textWrapper}>
-          <p className={css.info}>Розмір: {baby.babySize} см</p>
-          <p className={css.info}>Вага: {baby.babyWeight} г</p>
-
-          <p className={css.activity}>Активність: {baby.babyActivity}</p>
-
-          <p className={css.development}>{baby.babyDevelopment}</p>
+          <p className={css.info}>
+            Розмір: <span className={css.infotext}>{baby.babySize} см</span>
+          </p>
+          <p className={css.info}>
+            Вага: <span className={css.infotext}>{baby.babyWeight} г</span>
+          </p>
+          <p className={css.info}>
+            Активність:{" "}
+            <span className={css.infotext}>{baby.babyActivity}</span>
+          </p>
         </div>
+        <p className={css.infotext}>{baby.babyDevelopment}</p>
       </div>
     </div>
   );

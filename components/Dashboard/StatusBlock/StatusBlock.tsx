@@ -27,8 +27,14 @@ export default function StatusBlock() {
 
   return (
     <div className={css.block}>
-      <p className={css.text}>Тиждень {curWeekToPregnant}</p>
-      <p className={css.text}>Днів до зустрічі ~ {daysBeforePregnant}</p>
+      <div className={css.wrapper}>
+        <span className={css.label}>Тиждень</span>
+        <span className={css.value}>{curWeekToPregnant}</span>
+      </div>
+      <div className={css.wrapper}>
+        <span className={css.label}>Днів до зустрічі</span>
+        <span className={css.value}>~{daysBeforePregnant}</span>
+      </div>
     </div>
   );
 }
