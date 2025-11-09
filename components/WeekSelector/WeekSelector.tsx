@@ -40,7 +40,7 @@ export default function WeekSelector({
         mousewheel={{
           forceToAxis: true,
           releaseOnEdges: true,
-          sensitivity: 1,
+          sensitivity: 3,
         }}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
@@ -82,4 +82,4 @@ export default function WeekSelector({
       </Swiper>
     </div>
   );
-}
+}  
