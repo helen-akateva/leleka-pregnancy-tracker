@@ -1,0 +1,148 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal {
+  position: relative;
+  background: #ffffff;
+  text-align: center;
+
+  border-radius: 40px;
+  padding: 64px 20px;
+
+  width: 335px;
+  height: 413px;
+  max-width: 768px;
+  background: #fff;
+}
+
+@media only screen and (min-width: 768px) {
+  .modal {
+    padding: 64px 32px;
+    width: 704px;
+    height: 261px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .modal {
+    padding: 64px;
+    width: 768px;
+    height: 338px;
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000;
+  line-height: 1;
+}
+
+.title {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #000;
+
+  margin-bottom: 48px;
+}
+
+@media only screen and (min-width: 1440px) {
+  .title {
+    font-size: 48px;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media only screen and (min-width: 768px) {
+  .actions {
+    justify-content: center;
+    flex-direction: row;
+  }
+}
+
+.cancelBtn {
+  border: none;
+  border-radius: 100px;
+  padding: 10px 24px;
+  width: 268px;
+  height: 42px;
+
+  background: #ffdae0;
+  box-shadow: 0 4px 0 #ffcbd3;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000;
+
+  cursor: pointer;
+}
+
+.cancelBtn:hover,
+.cancelBtn:focus {
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.confirmBtn {
+  border: none;
+  border-radius: 100px;
+  padding: 10px 24px;
+  width: 268px;
+  height: 42px;
+
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000;
+
+  cursor: pointer;
+}
+
+.confirmBtn:hover,
+.confirmBtn:focus {
+  background: #fff4f6;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+@media only screen and (min-width: 1440px) {
+  .cancelBtn {
+    height: 46px;
+    font-size: 16px;
+  }
+  .confirmBtn {
+    height: 46px;
+    font-size: 16px;
+  }
+}

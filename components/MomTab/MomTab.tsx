@@ -10,7 +10,7 @@ const CategoryIcon = ({ category }: { category: string }) => {
     const iconMap: Record<string, string> = {
       Харчування: "icon-fork_spoon",
       Активність: "icon-fitness_center",
-      Відпочинок: "icon-chair",
+      "Відпочинок та комфорт": "icon-chair",
     };
     return iconMap[category] || "icon-food";
   };
@@ -25,10 +25,10 @@ const CategoryIcon = ({ category }: { category: string }) => {
 };
 
 export default function MomTab({ data }: MomTabProps) {
+  console.log(data.comfortTips);
   return (
     <div className={css.momTabContainer}>
       <div className={css.infoForMomBlock}>
-       
         <div className={css.howYouCanFeel}>
           <h3 className={css.advicesTitle}>Як ви можете почуватись</h3>
 
@@ -45,7 +45,6 @@ export default function MomTab({ data }: MomTabProps) {
           </p>
         </div>
 
-        
         <div className={css.advices}>
           <h3 className={css.advicesTitle}>Поради для вашого комфорту</h3>
           <ul className={css.advicesList}>
