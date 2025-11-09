@@ -5,7 +5,7 @@ import css from "./DiaryEntryCard.module.css";
 
 export default function DiaryEntryCard(noteDetails: DiaryNote) {
   return (
-    <li className={css["diary-item"]}>
+    <div className={css["diary-item"]}>
       <div className={css["diary-item-header"]}>
         <div className={css["diary-item-title"]}>{noteDetails.title}</div>
         <div className={css["diary-item-date"]}>{noteDetails.date}</div>
@@ -20,6 +20,6 @@ export default function DiaryEntryCard(noteDetails: DiaryNote) {
             );
           })}
       </ul>
-    </li>
+    </div>
   );
 }

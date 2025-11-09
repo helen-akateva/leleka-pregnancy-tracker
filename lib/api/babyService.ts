@@ -19,7 +19,6 @@ export const getBabyData = async (
     : `${api.defaults.baseURL}/weeks/greeting/public`;
 
   try {
-    console.log(endpoint);
     const response = await api.get<BabyDataResponse>(endpoint, {
       headers: { Accept: "application/json" },
       withCredentials: true,
