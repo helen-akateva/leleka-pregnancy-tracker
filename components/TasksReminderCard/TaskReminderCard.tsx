@@ -9,13 +9,10 @@ import { fetchTasks, TasksResponce } from "@/lib/api/taskApi";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import { useTaskModalStore } from "@/lib/store/taskModalStore";
 
-const API_BASE = "https://lehlehka.b.goit.study/api";
-
 export default function TaskReminderCard() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const { isOpen, openModal } = useTaskModalStore();
-  const [feeling, setFeeling] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +22,6 @@ export default function TaskReminderCard() {
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
-  console.log(data);
 
   return (
     <div className={styles.page}>

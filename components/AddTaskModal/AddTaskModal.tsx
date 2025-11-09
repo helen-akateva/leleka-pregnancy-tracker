@@ -9,7 +9,7 @@ export default function AddTaskModal() {
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTaskTitle || !newTaskDate) return;
+    const taskName = FormData;
   };
 
   return (
