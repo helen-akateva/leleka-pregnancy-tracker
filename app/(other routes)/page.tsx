@@ -19,11 +19,12 @@ export default function Home() {
             <BabyTodayCard />
             <MomTipCard />
           </div>
-        <div>
-          <TaskReminderCard />
-          <FeelingCard />
+          <div>
+            <TaskReminderCard />
+            <FeelingCard />
+          </div>
+          <div>тут буде Den секція</div>
         </div>
-        <div>тут буде Den секція</div>
       </main>
     </div>
   );
