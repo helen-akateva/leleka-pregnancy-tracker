@@ -3,6 +3,8 @@ import StatusBlock from "@/components/Dashboard/StatusBlock/StatusBlock";
 import BabyTodayCard from "@/components/Dashboard/BabyTodayCard/BabyTodayCard";
 import MomTipCard from "@/components/Dashboard/MomTipCard/MomTipCard";
 import GreetingBlock from "@/components/Dashboard/GreetingBlock/GreetingBlock";
+import TaskReminderCard from "@/components/TasksReminderCard/TaskReminderCard";
+import FeelingCard from "@/components/FeelingCheckCard/FeelingCheckCard";
 
 export default function Home() {
   return (
@@ -17,6 +19,9 @@ export default function Home() {
             <BabyTodayCard />
             <MomTipCard />
           </div>
+        <div>
+          <TaskReminderCard />
+          <FeelingCard />
         </div>
         <div>тут буде Den секція</div>
       </main>
