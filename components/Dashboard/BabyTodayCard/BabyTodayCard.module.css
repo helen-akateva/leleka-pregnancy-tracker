@@ -20,6 +20,16 @@
   .card {
     width: 642px;
     height: 421px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .card::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .card::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
   }
 }
 
@@ -90,10 +100,4 @@
   font-size: 14px;
   line-height: 1.5;
   color: #000;
-}
-
-@media only screen and (min-width: 1440px) {
-  .infotext {
-    font-size: 16px;
-  }
 }

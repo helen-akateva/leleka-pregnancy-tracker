@@ -8,6 +8,8 @@
 @media only screen and (min-width: 1440px) {
   .main {
     justify-content: flex-start;
+    overflow-x: hidden;
+    height: 100%;
   }
 }
 
