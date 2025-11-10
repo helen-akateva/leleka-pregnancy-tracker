@@ -4,6 +4,7 @@ import BabyTodayCard from "@/components/Dashboard/BabyTodayCard/BabyTodayCard";
 import MomTipCard from "@/components/Dashboard/MomTipCard/MomTipCard";
 import GreetingBlock from "@/components/Dashboard/GreetingBlock/GreetingBlock";
 import TaskReminderCard from "@/components/TasksReminderCard/TaskReminderCard";
+import FeelingCard from "@/components/FeelingCheckCard/FeelingCheckCard";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         </div> */}
         <div>
           <TaskReminderCard />
+          <FeelingCard />
         </div>
       </main>
     </div>

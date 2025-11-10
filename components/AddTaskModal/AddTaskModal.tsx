@@ -1,58 +1,61 @@
-import { useState } from "react";
+"use client";
+
 import styles from "./AddTaskModal.module.css";
+import { useState } from "react";
+import { createTask } from "@/lib/api/taskApi";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTaskModalStore } from "@/lib/store/taskModalStore";
 
 export default function AddTaskModal() {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [newTaskDate, setNewTaskDate] = useState("");
-  const { isOpen, openModal, closeModal } = useTaskModalStore();
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const queryClient = useQueryClient();
+  const { closeModal } = useTaskModalStore();
 
-  const handleCreateTask = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const taskName = FormData;
+    if (!name || !date) return;
+    await createTask({ name, date });
+    await queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    closeModal();
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <form onSubmit={handleCreateTask} className={styles.modal}>
-        <div className={styles.modalHeader}>
-          <h3>Нове завдання</h3>
-          <button
-            type="button"
-            className={styles.closeButton}
-            onClick={() => closeModal()}
-          >
-            ✕
-          </button>
-        </div>
-
-        <div>
-          <label htmlFor="taskTitle">Назва завдання</label>
+    <div className={styles.overlay} onClick={closeModal}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.closeButton} onClick={closeModal}>
+          ×
+        </button>
+        <h2 className={styles.title}>Нове завдання</h2>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <label className={styles.label} htmlFor="name">
+            Назва завдання
+          </label>
           <input
-            id="taskTitle"
+            id="name"
+            className={styles.input}
             type="text"
             placeholder="Прийняти вітаміни"
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-        </div>
 
-        <div>
-          <label htmlFor="taskDate">Дата</label>
+          <label className={styles.label} htmlFor="date">
+            Дата
+          </label>
           <input
-            id="taskDate"
+            id="date"
+            className={styles.input}
             type="date"
-            value={newTaskDate}
-            onChange={(e) => setNewTaskDate(e.target.value)}
-            required
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
-        </div>
 
-        <button type="submit" className={styles.createButton}>
-          Зберегти
-        </button>
-      </form>
+          <button className={styles.button} type="submit">
+            Зберегти
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

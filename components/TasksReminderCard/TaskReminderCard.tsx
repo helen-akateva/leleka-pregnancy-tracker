@@ -1,53 +1,75 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import styles from "./TaskReminderCard.module.css";
 import { Task } from "@/types/task";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-
-import { fetchTasks, TasksResponce } from "@/lib/api/taskApi";
+import {
+  keepPreviousData,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { fetchTasks, updateTaskStatus } from "@/lib/api/taskApi";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import { useTaskModalStore } from "@/lib/store/taskModalStore";
 
 export default function TaskReminderCard() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
   const { isOpen, openModal } = useTaskModalStore();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  const { data } = useQuery<TasksResponce>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["tasks"],
-    queryFn: () => fetchTasks({}),
+    queryFn: fetchTasks,
     placeholderData: keepPreviousData,
-    refetchOnMount: false,
+  });
+
+  const { mutate: toggleStatus, isPending } = useMutation({
+    mutationFn: (task: Task) => updateTaskStatus(task._id, !task.isDone),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
   return (
-    <div className={styles.page}>
-      {/* ПРАВА КОЛОНКА */}
-      <div className={styles.rightColumn}>
-        {/* ВАЖЛИВІ ЗАВДАННЯ */}
-        <section className={styles.section}>
-          <h2>Важливі завдання</h2>
-          <button onClick={() => openModal()}>+ Нове завдання</button>
-
-          {loading && <p>Завантаження...</p>}
-          {error && <p className={styles.error}>{error}</p>}
-
-          <ul className={styles.taskList}>
-            {tasks.map((t) => (
-              <li key={t._id} className={styles.taskItem}>
-                <span>{t.name}</span> —{" "}
-                <span>{new Date(t.date).toLocaleDateString("uk-UA")}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-        {isOpen && <AddTaskModal />}
+    <div className={styles.section}>
+      <div className={styles.header}>
+        <h2>Важливі завдання</h2>
+        <button onClick={openModal}>＋</button>
       </div>
+
+      {isLoading && <p>Завантаження...</p>}
+      {isError && <p>Помилка завантаження завдань 😢</p>}
+
+      <ul className={styles.taskList}>
+        {data?.tasks?.length ? (
+          data.tasks.map((t) => (
+            <li
+              key={t._id}
+              className={`${styles.taskItem} ${t.isDone ? styles.done : ""}`}
+            >
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={t.isDone}
+                  onChange={() => toggleStatus(t)}
+                  disabled={isPending}
+                />
+                <span className={styles.customCheckbox}></span>
+              </label>
+              <div className={styles.taskText}>
+                <span className={styles.taskDate}>
+                  {new Date(t.date).toLocaleDateString("uk-UA", {
+                    day: "2-digit",
+                    month: "2-digit",
+                  })}
+                </span>
+                <span className={styles.taskName}>{t.name}</span>
+              </div>
+            </li>
+          ))
+        ) : (
+          <p className={styles.empty}>Немає завдань</p>
+        )}
+      </ul>
+
+      {isOpen && <AddTaskModal />}
     </div>
   );
 }
-
-//

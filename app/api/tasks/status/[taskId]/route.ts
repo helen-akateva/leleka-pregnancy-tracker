@@ -14,20 +14,24 @@ export async function PATCH(request: Request, { params }: Props) {
     const { taskId } = await params;
     const body = await request.json();
 
-    const res = await lehlehkaApi.patch(`/task/status/${taskId}`, body, {
+    const payload = typeof body === "boolean" ? { isDone: body } : body;
+
+    const res = await lehlehkaApi.patch(`/tasks/status/${taskId}`, payload, {
       headers: {
         Cookie: cookieStore.toString(),
       },
     });
+
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.status }
+        { status: error.response?.status || 500 }
       );
     }
+
     logErrorResponse({ message: (error as Error).message });
     return NextResponse.json(
       { error: "Internal Server Error" },
