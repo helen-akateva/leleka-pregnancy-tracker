@@ -3,12 +3,16 @@
 import Image from "next/image";
 import css from "./DiaryEntryDetails.module.css";
 import { useSelectedNoteStore } from "@/lib/store/selectedNoteStore";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import React from "react";
-import { DiaryNote } from "@/lib/api/diaryApi";
+import { DiaryNote, deleteNote } from "@/lib/api/diaryApi";
+import { useNoteModalStore } from "@/lib/store/modalNoteStore";
 
 export default function DiaryEntryDetails() {
   const selectedNote = useSelectedNoteStore((s) => s.selectedNote);
+  const setSelectedNote = useSelectedNoteStore((s) => s.setSelectedNote);
+  const openNoteModal = useNoteModalStore((s) => s.openNoteModal);
+
   const queryClient = useQueryClient();
 
   // якщо selectedNote є — беремо її. Інакше пробуємо знайти в кеші ["notes"].
@@ -22,6 +26,50 @@ export default function DiaryEntryDetails() {
 
   const note = selectedNote ?? noteFromCache ?? null;
 
+  // Мутація видалення нотатки
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteNote(id),
+    onMutate: async (id: string) => {
+      // оптимістичне оновлення кешу: видаляємо нотатку з локального кешу
+      await queryClient.cancelQueries({ queryKey: ["notes"] });
+      const previous = queryClient.getQueryData<{ diaryNotes: DiaryNote[] }>([
+        "notes",
+      ]);
+      if (previous) {
+        queryClient.setQueryData<{ diaryNotes: DiaryNote[] }>(["notes"], {
+          ...previous,
+          diaryNotes: previous.diaryNotes.filter((n) => n._id !== id),
+        });
+      }
+      // якщо видалена була поточна вибрана нотатка — очищаємо selection
+      if (selectedNote?._id === id) {
+        setSelectedNote(null);
+      }
+      return { previous };
+    },
+    onError: (
+      err: unknown,
+      id: string,
+      context?: { previous?: { diaryNotes: DiaryNote[] } }
+    ) => {
+      // відкат кешу у випадку помилки
+      if (context?.previous) {
+        queryClient.setQueryData(["notes"], context.previous);
+      }
+      // Тут можна логувати помилку або показати повідомлення користувачу
+      console.error("Delete note failed", err);
+    },
+    onSettled: () => {
+      // оновлюємо/перезапитуємо список нотаток після завершення
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    if (!id) return;
+    deleteMutation.mutate(id);
+  };
+
   if (!note) {
     return (
       <section className={css["diary-details-container"]}>
@@ -33,6 +81,11 @@ export default function DiaryEntryDetails() {
       </section>
     );
   }
+
+  const handleEdit = (note: DiaryNote) => {
+    setSelectedNote(note); // 1) поставити note в стор
+    openNoteModal(); // 2) відкрити модалку
+  };
 
   return (
     <section className={css["diary-details-container"]}>
@@ -46,8 +99,9 @@ export default function DiaryEntryDetails() {
                 width={24}
                 height={24}
                 alt="edit"
+                className={css["edit-icon"]}
                 onClick={() => {
-                  console.log("edit", note._id);
+                  handleEdit(note);
                 }}
               />
             </div>
@@ -58,8 +112,9 @@ export default function DiaryEntryDetails() {
                 width={24}
                 height={24}
                 alt="delete"
+                className={css["delete-icon"]}
                 onClick={() => {
-                  console.log("delete", note._id);
+                  handleDelete(note._id);
                 }}
               />
             </div>

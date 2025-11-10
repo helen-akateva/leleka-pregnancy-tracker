@@ -13,6 +13,7 @@ export async function PATCH(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
     const { noteId } = await params;
+    console.log(noteId);
     const body = await request.json();
 
     const res = await lehlehkaApi.patch(`/diary/${noteId}`, body, {
@@ -46,6 +47,7 @@ export async function DELETE(request: Request, { params }: Props) {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      params: params,
     });
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {

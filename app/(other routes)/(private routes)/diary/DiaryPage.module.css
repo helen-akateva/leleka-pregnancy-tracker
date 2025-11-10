@@ -1,0 +1,4 @@
+.diary_wrapper {
+  display: flex;
+  gap: 32px;
+}

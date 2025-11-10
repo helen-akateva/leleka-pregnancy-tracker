@@ -50,18 +50,18 @@ export const createNote = async (note: NoteDiaryProps): Promise<DiaryNote> => {
   return response.data;
 };
 
-export const updateNote = async (note: DiaryNote): Promise<DiaryNote> => {
-  const { _id, title, description, emotions } = note;
-  const response = await nextServerApi.post<DiaryNote>(`/diary/${_id}`, {
-    title,
-    description,
-    emotions,
-  });
+export const updateNote = async (
+  id: string,
+  note: NoteDiaryProps
+): Promise<DiaryNote> => {
+  console.log(note);
+  const response = await nextServerApi.patch<DiaryNote>(`/diary/${id}`, note);
   return response.data;
 };
 
 export const deleteNote = async (id: string): Promise<void> => {
-  const response = await nextServerApi.delete(`/notes/${id}`, {
+  console.log(id);
+  const response = await nextServerApi.delete(`/diary/${id}`, {
     params: { noteId: id },
   });
   return response.data;

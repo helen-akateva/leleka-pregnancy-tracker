@@ -14,7 +14,7 @@ import Select from "../SelectComponent/Select";
 
 import css from "./AddDiaryEntryForm.module.css";
 import { Emotion, fetchEmotions } from "@/lib/api/clientApi";
-import { createNote } from "@/lib/api/diaryApi";
+import { createNote, updateNote } from "@/lib/api/diaryApi"; // <- додано updateNote
 import { useNoteModalStore } from "@/lib/store/modalNoteStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -24,7 +24,16 @@ interface DiaryValues {
   description: string;
 }
 
-const initialValues: DiaryValues = {
+interface Note {
+  _id: string;
+  title: string;
+  description: string;
+  emotions: Emotion[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+const emptyValues: DiaryValues = {
   title: "",
   emotions: [],
   description: "",
@@ -34,30 +43,53 @@ const diaryValidationSchema = Yup.object().shape({
   title: Yup.string()
     .required("Введіть заголовок")
     .max(100, "Максимум 100 символів"),
-  categories: Yup.array().min(1, "Оберіть хоча б одну категорію"),
+  emotions: Yup.array().min(1, "Оберіть хоча б одну категорію"),
   description: Yup.string()
     .required("Поле запису не може бути порожнім")
     .max(1000, "Максимум 1000 символів"),
 });
 
-export default function AddDiaryEntryForm() {
+interface Props {
+  editingNote?: Note | null;
+}
+
+export default function AddDiaryEntryForm({ editingNote = null }: Props) {
   const fieldId = useId();
   const { closeNoteModal } = useNoteModalStore();
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  // Мутація для створення
+  const createMutation = useMutation({
     mutationFn: (payload: {
       title: string;
       description: string;
       emotions: string[];
     }) => createNote(payload),
     onSuccess: () => {
-      // Інвалідовуємо кеш нотаток — DiaryList зробить рефетч автоматично
       queryClient.invalidateQueries({ queryKey: ["notes"] });
-      // Закриваємо модаль після успішного збереження
       closeNoteModal();
     },
   });
+
+  // Мутація для оновлення
+  const updateMutation = useMutation({
+    mutationFn: (payload: {
+      id: string;
+      body: { title: string; description: string; emotions: string[] };
+    }) => updateNote(payload.id, payload.body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      closeNoteModal();
+    },
+  });
+
+  const initialValues: DiaryValues = editingNote
+    ? {
+        title: editingNote.title,
+        emotions: editingNote.emotions || [],
+        description: editingNote.description,
+      }
+    : emptyValues;
 
   const handleSubmit = async (
     values: DiaryValues,
@@ -65,19 +97,39 @@ export default function AddDiaryEntryForm() {
   ) => {
     const emotionIds = values.emotions.map(({ _id }) => _id);
 
-    mutation.mutate(
-      {
-        title: values.title,
-        description: values.description,
-        emotions: emotionIds,
-      },
-      {
-        onSettled: () => {
-          actions.setSubmitting(false);
-          actions.resetForm();
+    if (editingNote && editingNote._id) {
+      // Update
+      updateMutation.mutate(
+        {
+          id: editingNote._id,
+          body: {
+            title: values.title,
+            description: values.description,
+            emotions: emotionIds,
+          },
         },
-      }
-    );
+        {
+          onSettled: () => {
+            actions.setSubmitting(false);
+          },
+        }
+      );
+    } else {
+      // Create
+      createMutation.mutate(
+        {
+          title: values.title,
+          description: values.description,
+          emotions: emotionIds,
+        },
+        {
+          onSettled: () => {
+            actions.setSubmitting(false);
+            actions.resetForm();
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -85,9 +137,12 @@ export default function AddDiaryEntryForm() {
       initialValues={initialValues}
       onSubmit={handleSubmit}
       validationSchema={diaryValidationSchema}
+      enableReinitialize // важливо для підстановки editingNote
     >
       <Form className={css.form}>
-        <h2 className={css.title}>Новий запис</h2>
+        <h2 className={css.title}>
+          {editingNote ? "Редагувати запис" : "Новий запис"}
+        </h2>
 
         <div className={css.formGroup}>
           <label className={css.labelText} htmlFor={`${fieldId}-title`}>
@@ -133,7 +188,7 @@ export default function AddDiaryEntryForm() {
             )}
           </Field>
           <ErrorMessage
-            name="categories"
+            name="emotions"
             component="span"
             className={css.error}
           />
