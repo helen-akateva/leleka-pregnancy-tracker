@@ -34,7 +34,7 @@ export const profileValidationSchema = Yup.object({
 export default function ProfileEditForm() {
   const fieldId = useId();
   const handleSubmit = (values: ProfileFormValues) => {
-    console.log("send form values", values);
+    console.log("send form values1", values);
   };
 
   return (
