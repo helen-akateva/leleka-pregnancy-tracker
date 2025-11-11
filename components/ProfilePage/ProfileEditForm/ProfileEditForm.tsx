@@ -1,7 +1,14 @@
 "use client";
 
 import * as Yup from "yup";
-import { Formik, Form, Field, ErrorMessage, FieldProps, FormikHelpers } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  FieldProps,
+  FormikHelpers,
+} from "formik";
 import styles from "./ProfileEditForm.module.css";
 import { useId } from "react";
 import Select from "@/components/SelectComponent/Select";
@@ -15,7 +22,7 @@ export type Gender = "Чоловіча" | "Жіноча" | "Невідомо" | 
 export interface ProfileFormValues {
   name: string;
   email: string;
-  gender: Gender;
+  babyGender: Gender;
   dueDate: string;
 }
 
@@ -37,8 +44,6 @@ export const profileValidationSchema = Yup.object({
 
 export default function ProfileEditForm() {
   const fieldId = useId();
- };
-
   const user = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
 
@@ -79,7 +84,7 @@ export default function ProfileEditForm() {
       setSuccessMessage("Профіль успішно оновлено");
     } catch (err: unknown) {
       let message = "Помилка при збереженні";
-
+      console.log(submitError, successMessage);
       if (typeof err === "string") {
         message = err;
       } else if (err && typeof err === "object") {
@@ -98,7 +103,7 @@ export default function ProfileEditForm() {
 
   return (
     <Formik
-      initialValues={{ name: "", email: "", gender: "", dueDate: "" }}
+      initialValues={{ name: "", email: "", babyGender: "", dueDate: "" }}
       validationSchema={profileValidationSchema}
       onSubmit={handleSubmit}
     >
