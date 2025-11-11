@@ -68,17 +68,11 @@ export default function DiaryEntryDetails() {
   const handleDelete = (id: string) => {
     if (!id) return;
     deleteMutation.mutate(id);
+    setSelectedNote(null);
   };
 
   if (!note) {
     return null;
-    // <section className={css["diary-details-container"]}>
-    //   <div className={css["diary-details-block"]}>
-    //     <div className={css["diary-details-placeholder"]}>
-    //       Оберіть запис щоб побачити деталі
-    //     </div>
-    //   </div>
-    // </section>
   }
 
   const handleEdit = (note: DiaryNote) => {

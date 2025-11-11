@@ -68,7 +68,6 @@ export default function ProfileEditForm() {
               className={styles.error}
             />
           </div>
-
           <div className={styles.profilefield}>
             <label htmlFor="email" className={styles.profilelabel}>
               Пошта
@@ -92,7 +91,6 @@ export default function ProfileEditForm() {
               className={styles.error}
             />
           </div>
-
           <div className={styles.profilefield}>
             <label htmlFor="gender" className={styles.profilelabel}>
               Стать дитини
@@ -142,7 +140,6 @@ export default function ProfileEditForm() {
               className={styles.error}
             />
           </div>
-
           <div className={styles.profilefield}>
             <label htmlFor="dueDate" className={styles.profilelabel}>
               Планова дата пологів
@@ -160,7 +157,6 @@ export default function ProfileEditForm() {
               )}
             </Field>
           </div>
-
           <div className={styles.profileactions}>
             <button
               type="button"
