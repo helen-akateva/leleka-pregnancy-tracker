@@ -11,10 +11,14 @@ import {
 import { fetchTasks, updateTaskStatus } from "@/lib/api/taskApi";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import { useTaskModalStore } from "@/lib/store/taskModalStore";
+import { useAuthStore } from "@/lib/store/authStore";
+import { useRouter } from "next/navigation";
 
 export default function TaskReminderCard() {
   const { isOpen, openModal } = useTaskModalStore();
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const router = useRouter();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["tasks"],
@@ -27,11 +31,17 @@ export default function TaskReminderCard() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
+  const handleBtnClick = () => {
+    if (!user) {
+      router.push("/auth/register");
+    } else openModal();
+  };
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>
         <h2>Важливі завдання</h2>
-        <button onClick={openModal}>＋</button>
+        <button onClick={handleBtnClick}>＋</button>
       </div>
 
       {isLoading && <p>Завантаження...</p>}

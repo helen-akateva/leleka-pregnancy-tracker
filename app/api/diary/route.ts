@@ -32,13 +32,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const cookieStore = await cookies();
+    const url = new URL(req.url);
+    const searchParams = Object.fromEntries(url.searchParams.entries());
+    // Якщо потрібно числа
+    const page = searchParams.page ? Number(searchParams.page) : undefined;
+    const limit = searchParams.limit ? Number(searchParams.limit) : undefined;
+
+    // Побудова params для передачі далі
+    const paramsToBackend: Record<string, unknown> = {};
+    if (page !== undefined) paramsToBackend.page = page;
+    if (limit !== undefined) paramsToBackend.limit = limit;
+
     const res = await lehlehkaApi(`/diary`, {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      params: paramsToBackend,
     });
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {

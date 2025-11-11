@@ -130,6 +130,8 @@ export default function AddDiaryEntryForm({ editingNote = null }: Props) {
         }
       );
     }
+
+    closeNoteModal();
   };
 
   return (

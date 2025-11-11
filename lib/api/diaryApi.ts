@@ -34,8 +34,9 @@ interface NoteDiaryProps {
 export const fetchNotes = async (
   params: FetchNotesParams
 ): Promise<FetchNotesResponse> => {
+  console.log(params);
   const response = await nextServerApi.get<FetchNotesResponse>(`/diary`, {
-    params,
+    params: params,
   });
   return response.data;
 };
