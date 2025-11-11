@@ -6,7 +6,7 @@ import styles from "./ProfileEditForm.module.css";
 import { useId } from "react";
 import Select from "@/components/SelectComponent/Select";
 
-export type Gender = "Чоловіча" | "Жіноча" | "";
+export type Gender = "Чоловіча" | "Жіноча" | "Невідомо" | "";
 
 export interface ProfileFormValues {
   name: string;
@@ -16,7 +16,7 @@ export interface ProfileFormValues {
 }
 
 interface GenderOption {
-  value: Exclude<Gender, "">; // тільки "Чоловіча" або "Жіноча"
+  value: Exclude<Gender, "">;
   label: string;
 }
 
@@ -26,7 +26,7 @@ export const profileValidationSchema = Yup.object({
     .email("Некоректна пошта")
     .required("Пошта є обов’язковою"),
   gender: Yup.string()
-    .oneOf(["Чоловіча", "Жіноча"], "Оберіть стать")
+    .oneOf(["Чоловіча", "Жіноча", "Невідомо", ""], "Оберіть стать")
     .required("Оберіть стать"),
   dueDate: Yup.string().required("Оберіть дату"),
 });
@@ -107,6 +107,7 @@ export default function ProfileEditForm() {
                 const options: GenderOption[] = [
                   { value: "Чоловіча", label: "Хлопчик" },
                   { value: "Жіноча", label: "Дівчинка" },
+                  { value: "Невідомо", label: "Ще не знаю" },
                 ];
 
                 const loadOptions = (

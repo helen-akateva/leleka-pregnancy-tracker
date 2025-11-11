@@ -53,7 +53,7 @@ export default function Select<
       styles={{
         container: (styles) => ({
           ...styles,
-          zIndex: 9,
+          zIndex: 8,
           fontSize: "14px",
           "@media only screen and (min-width: 1440px)": {
             fontSize: "16px",
