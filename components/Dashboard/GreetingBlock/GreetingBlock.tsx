@@ -23,7 +23,7 @@ export default function GreetingBlock() {
   // }
   return (
     <div className={css.block}>
-      <h2 className={css.title}>Доброго ранку, {user?.name}!</h2>
+      <h2 className={css.title}>Доброго ранку {user && ", " + user?.name}!</h2>
     </div>
   );
 }
