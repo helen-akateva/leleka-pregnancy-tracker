@@ -1,7 +1,6 @@
 .pageContainer {
   display: flex;
   justify-content: space-between;
-  height: 100vh;
 }
 
 .formColumn {
@@ -56,6 +55,9 @@
   .header {
     position: relative;
   }
+  .formColumn {
+    padding: 0 64px;
+  }
 }
 @media screen and (max-width: 767px) {
   .container {
@@ -64,5 +66,6 @@
 
   .formColumn {
     width: 335px;
+    padding: 0;
   }
 }
