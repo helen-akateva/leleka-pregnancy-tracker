@@ -17,8 +17,6 @@ export function Providers({ children }: { children: ReactNode }) {
         <Toaster position="top-right" />
 
         <SideBar />
-        <ConfirmationModal />
-
         {children}
       </AuthProvider>
     </QueryClientProvider>
