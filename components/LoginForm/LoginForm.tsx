@@ -33,7 +33,7 @@ const LoginForm = () => {
     actions: FormikHelpers<LoginValues>
   ) => {
     try {
-        const { user } = await loginUser(values);
+      const { user } = await loginUser(values);
       setUser(user);
 
       try {
@@ -55,9 +55,9 @@ const LoginForm = () => {
     <div className={css.container}>
       <header className={css.header}>
         <Link href="/" className={css.logo}>
-        <Image src="/logo.svg" alt="Logo" width={30} height={30} />
-        <Image src="/logotext.svg" alt="Logotext" width={60} height={13} />
-      </Link>
+          <Image src="/logo.svg" alt="Logo" width={30} height={30} />
+          <Image src="/logotext.svg" alt="Logotext" width={60} height={13} />
+        </Link>
       </header>
 
       <div className={css.pageWrapper}>
@@ -71,9 +71,7 @@ const LoginForm = () => {
             {({ isValid, dirty }) => (
               <Form className={css.form}>
                 <div className={css.inputBox}>
-                  <label htmlFor="email" className={css.label}>
-                    Пошта
-                  </label>
+                  <label htmlFor="email" className={css.label}></label>
                   <Field
                     id="email"
                     name="email"
@@ -87,9 +85,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className={css.inputBox}>
-                  <label htmlFor="password" className={css.label}>
-                    Пароль
-                  </label>
+                  <label htmlFor="password" className={css.label}></label>
                   <Field
                     id="password"
                     name="password"

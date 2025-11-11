@@ -50,7 +50,7 @@
 }
 
 .header {
-  position: absolute;
+  position: block;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -58,21 +58,23 @@
 }
 
 .title {
-  font-family: var(--font-comfortaa);
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 1.2;
-  letter-spacing: 0.01em;
-  text-align: center;
   width: 335px;
   padding-bottom: 32px;
+  margin-top: 197px;
+  font-family: var(--second-family);
   font-weight: 700;
+  font-size: 36px;
+  line-height: 120%;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--color-scheme-text);
 }
 @media (min-width: 768px) {
   .title {
     width: 480px;
     padding-bottom: 32px;
     margin-left: 112px;
+    margin-top: 255px;
   }
 }
 @media (min-width: 1440px) {

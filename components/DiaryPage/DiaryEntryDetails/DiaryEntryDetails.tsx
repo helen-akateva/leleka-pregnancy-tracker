@@ -71,15 +71,14 @@ export default function DiaryEntryDetails() {
   };
 
   if (!note) {
-    return (
-      <section className={css["diary-details-container"]}>
-        <div className={css["diary-details-block"]}>
-          <div className={css["diary-details-placeholder"]}>
-            Оберіть запис щоб побачити деталі
-          </div>
-        </div>
-      </section>
-    );
+    return null;
+    // <section className={css["diary-details-container"]}>
+    //   <div className={css["diary-details-block"]}>
+    //     <div className={css["diary-details-placeholder"]}>
+    //       Оберіть запис щоб побачити деталі
+    //     </div>
+    //   </div>
+    // </section>
   }
 
   const handleEdit = (note: DiaryNote) => {

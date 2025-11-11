@@ -6,7 +6,7 @@ import GreetingBlock from "@/components/Dashboard/GreetingBlock/GreetingBlock";
 import TaskReminderCard from "@/components/TasksReminderCard/TaskReminderCard";
 import FeelingCard from "@/components/FeelingCheckCard/FeelingCheckCard";
 
-export default function Home() {
+export default function DashboardPage() {
   return (
     <div className={styles.page}>
       <GreetingBlock />

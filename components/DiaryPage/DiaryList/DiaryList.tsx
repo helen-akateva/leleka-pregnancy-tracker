@@ -48,7 +48,11 @@ export default function DiaryList() {
                 );
               })
             : ""}
-          {!data && <p style={{ padding: "20px" }}>Наразі нотаток немає...</p>}
+          {data?.totalCount === 0 && (
+            <p style={{ padding: "20px" }}>
+              Наразі записи у щоденнику відсутні
+            </p>
+          )}
         </ul>
       </div>
       {isOpen && (
