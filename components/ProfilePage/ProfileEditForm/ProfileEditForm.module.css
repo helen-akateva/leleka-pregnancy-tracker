@@ -138,8 +138,7 @@
 
 @media screen and (min-width: 768px) {
   .profilecancel {
-    max-width: 135px;
-    height: 38px;
+    max-width: 150px;
   }
 }
 
@@ -160,14 +159,13 @@
 }
 
 @media screen and (min-width: 768px) {
-  .profilecancel {
-    max-width: 150px;
-    height: 38px;
+  .profilesave {
+    max-width: 140px;
   }
 }
 
 @media screen and (min-width: 1440px) {
-  .profilecancel {
+  .profilesave {
     max-width: 149px;
     height: 42px;
   }
