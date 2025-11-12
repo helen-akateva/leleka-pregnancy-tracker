@@ -20,6 +20,11 @@ export default function AddTaskModal() {
     closeModal();
   };
 
+  const today = new Date().toISOString().slice(0, 10);
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 1);
+  const max = maxDate.toISOString().slice(0, 10);
+
   return (
     <div className={styles.overlay} onClick={closeModal}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -48,6 +53,8 @@ export default function AddTaskModal() {
             className={styles.input}
             type="date"
             value={date}
+            min={today}
+            max={max}
             onChange={(e) => setDate(e.target.value)}
           />
 
