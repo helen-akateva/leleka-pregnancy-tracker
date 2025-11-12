@@ -9,6 +9,7 @@ import { useAuthStore } from "@/lib/store/authStore";
 import { useEffect, useState } from "react";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SideBar() {
   const router = useRouter();
@@ -36,6 +37,8 @@ export default function SideBar() {
       clearIsAuthenticated();
       closeSidebar();
 
+      toast.success("Ви успішно вийшли з акаунту!");
+
       router.push("/");
 
       setTimeout(() => {
@@ -43,6 +46,7 @@ export default function SideBar() {
       }, 300);
     } catch (error) {
       console.error("Помилка виходу:", error);
+      toast.error("Сталася помилка при виході. Спробуйте ще раз!");
     } finally {
       setIsModalOpen(false);
     }
