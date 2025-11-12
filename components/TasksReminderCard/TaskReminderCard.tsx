@@ -24,6 +24,7 @@ export default function TaskReminderCard() {
     queryKey: ["tasks"],
     queryFn: fetchTasks,
     placeholderData: keepPreviousData,
+    enabled: !!user,
   });
 
   const { mutate: toggleStatus, isPending } = useMutation({
