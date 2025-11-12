@@ -17,34 +17,26 @@ export default function DiaryEntryDetails() {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
+
   const note = selectedNote ?? null;
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteNote(id),
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["notes"] });
-      const previous = queryClient.getQueryData<{ diaryNotes: DiaryNote[] }>([
-        "notes",
-      ]);
-      if (previous) {
-        queryClient.setQueryData<{ diaryNotes: DiaryNote[] }>(["notes"], {
-          ...previous,
-          diaryNotes: previous.diaryNotes.filter((n) => n._id !== id),
-        });
-      }
+
       if (selectedNote?._id === id) {
         setSelectedNote(null);
       }
-      return { previous };
+      return <></>;
     },
     onError: (err: unknown) => {
-      // Тут можна логувати помилку або показати повідомлення користувачу
       console.error("Delete note failed", err);
     },
     onSettled: () => {
-      // оновлюємо/перезапитуємо список нотаток після завершення
       queryClient.invalidateQueries({ queryKey: ["notes"] });
-      router.push("/diary");
+      useSelectedNoteStore.getState().setSelectedNote(null);
+      router.replace("/diary");
     },
   });
   if (!note) {
@@ -61,8 +53,8 @@ export default function DiaryEntryDetails() {
   };
 
   const handleEdit = (note: DiaryNote) => {
-    setSelectedNote(note); // 1) поставити note в стор
-    openNoteModal(); // 2) відкрити модалку
+    setSelectedNote(note);
+    openNoteModal();
   };
 
   return (
