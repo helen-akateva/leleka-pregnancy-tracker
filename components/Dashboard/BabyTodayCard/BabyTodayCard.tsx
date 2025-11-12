@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import css from "./BabyTodayCard.module.css";
 import type { BabyToday } from "@/types/baby";
@@ -9,9 +9,13 @@ import { useAuthStore } from "@/lib/store/authStore";
 
 export default function BabyTodayCard() {
   const { isAuthenticated } = useAuthStore();
+  console.log(isAuthenticated);
   const { data, isError } = useQuery({
     queryKey: ["babyData"],
-    queryFn: () => getBabyData(isAuthenticated),
+    queryFn: async () => await getBabyData(isAuthenticated),
+    placeholderData: keepPreviousData,
+    refetchOnReconnect: "always",
+    refetchOnMount: "always",
   });
 
   if (isError || !data?.data?.babyToday) {
