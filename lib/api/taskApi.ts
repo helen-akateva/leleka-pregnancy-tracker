@@ -1,5 +1,6 @@
 import { Task } from "@/types/task";
 import { nextServerApi } from "./api";
+import axios from "axios";
 
 export interface TasksResponce {
   tasks: Task[];
@@ -9,9 +10,22 @@ export interface TasksResponce {
 }
 
 // GET /tasks
+// export async function fetchTasks(): Promise<TasksResponce> {
+//   const res = await nextServerApi.get("/tasks");
+//   return res.data;
+// }
+
 export async function fetchTasks(): Promise<TasksResponce> {
-  const res = await nextServerApi.get("/tasks");
-  return res.data;
+  try {
+    const res = await nextServerApi.get("/tasks");
+    return res.data;
+  } catch (error) {
+    // Якщо користувач не аутентифікований, повертаємо пусті дані
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      return { tasks: [], totalCount: 0, totalPages: 0, page: 0 };
+    }
+    throw error;
+  }
 }
 
 // POST /tasks

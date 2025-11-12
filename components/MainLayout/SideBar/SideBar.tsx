@@ -8,14 +8,17 @@ import { useSidebarStore } from "@/lib/store/sidebarStore";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useEffect, useState } from "react";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { getBabyData } from "@/lib/api/babyService";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function SideBar() {
   const router = useRouter();
+  const pathname = usePathname();
+  const queryClient = useQueryClient();
+
   const { isOpen, closeSidebar } = useSidebarStore();
-  const { user, clearIsAuthenticated, isAuthenticated } = useAuthStore();
+  const { user, clearIsAuthenticated } = useAuthStore();
   const [isMobile, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,14 +38,18 @@ export default function SideBar() {
   const handleConfirmLogout = async () => {
     try {
       await logoutRequest();
-
-      closeSidebar();
       clearIsAuthenticated();
-      getBabyData(isAuthenticated);
+      closeSidebar();
 
       toast.success("Ви успішно вийшли з акаунту!");
 
-      router.push("/");
+      if (pathname === "/") {
+        setTimeout(async () => {
+          await queryClient.invalidateQueries({ queryKey: ["babyData"] });
+        }, 300);
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error("Помилка виходу:", error);
       toast.error("Сталася помилка при виході. Спробуйте ще раз!");
@@ -56,7 +63,6 @@ export default function SideBar() {
   };
 
   const isAuth = Boolean(user);
-
   const sidebarClass = `${css.sidebar} ${isOpen ? css.open : ""}`;
 
   const handleLinkClick = () => {
