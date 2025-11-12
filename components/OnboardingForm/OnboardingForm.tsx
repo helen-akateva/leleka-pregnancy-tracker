@@ -106,6 +106,8 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
                 <OnboardingCustomDate
                   value={values.dueDate}
                   onChange={(date) => setFieldValue("dueDate", date)}
+                  maxDate={maxDate}
+                  minDate={minDate}
                 />
                 <ErrorMessage name="dueDate">
                   {(msg) => <span className={styles.errorMessage}>{msg}</span>}
