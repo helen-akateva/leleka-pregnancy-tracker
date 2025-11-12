@@ -17,39 +17,48 @@ import { useRouter } from "next/navigation";
 export default function TaskReminderCard() {
   const { isOpen, openModal } = useTaskModalStore();
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
   const router = useRouter();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["tasks"],
     queryFn: fetchTasks,
     placeholderData: keepPreviousData,
   });
 
-  const { mutate: toggleStatus, isPending } = useMutation({
+  const { mutate: toggleStatus } = useMutation({
     mutationFn: (task: Task) => updateTaskStatus(task._id, !task.isDone),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
-  const handleBtnClick = () => {
+  const tasks = data?.tasks ?? [];
+
+  const handleAddTaskClick = () => {
     if (!user) {
       router.push("/auth/register");
-    } else openModal();
+      return;
+    }
+    openModal();
   };
 
   return (
     <div className={styles.section}>
       <div className={styles.header}>
         <h2>Важливі завдання</h2>
-        <button onClick={handleBtnClick}>＋</button>
+        <button onClick={handleAddTaskClick}>＋</button>
       </div>
 
-      {isLoading && <p>Завантаження...</p>}
-      {isError && <p>Помилка завантаження завдань 😢</p>}
-
-      <ul className={styles.taskList}>
-        {data?.tasks?.length ? (
-          data.tasks.map((t) => (
+      {tasks.length === 0 ? (
+        <div className={styles.emptyState}>
+          <p className={styles.emptyTitle}>Наразі немає жодних завдань</p>
+          <p className={styles.emptySubtitle}>Створіть мерщій нове завдання!</p>
+          <button className={styles.createButton} onClick={handleAddTaskClick}>
+            Створити завдання
+          </button>
+        </div>
+      ) : (
+        <ul className={styles.taskList}>
+          {tasks.map((t) => (
             <li
               key={t._id}
               className={`${styles.taskItem} ${t.isDone ? styles.done : ""}`}
@@ -59,7 +68,6 @@ export default function TaskReminderCard() {
                   type="checkbox"
                   checked={t.isDone}
                   onChange={() => toggleStatus(t)}
-                  disabled={isPending}
                 />
                 <span className={styles.customCheckbox}></span>
               </label>
@@ -73,11 +81,9 @@ export default function TaskReminderCard() {
                 <span className={styles.taskName}>{t.name}</span>
               </div>
             </li>
-          ))
-        ) : (
-          <p className={styles.empty}>Немає завдань</p>
-        )}
-      </ul>
+          ))}
+        </ul>
+      )}
 
       {isOpen && <AddTaskModal />}
     </div>
