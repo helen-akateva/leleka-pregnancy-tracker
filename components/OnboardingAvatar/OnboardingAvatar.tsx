@@ -12,6 +12,10 @@ export default function ProfileAvatar() {
   const setUser = useAuthStore((state) => state.setUser);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [localAvatar, setLocalAvatar] = useState<string | null>(
+    user?.avatarUrl ?? null
+  );
+
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
@@ -19,6 +23,8 @@ export default function ProfileAvatar() {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setLocalAvatar(previewUrl);
       try {
         const { user: updatedUser } = await uploadImage(file);
         console.log(updatedUser);
@@ -36,7 +42,11 @@ export default function ProfileAvatar() {
     <div className={css.avatarSection}>
       <>
         <Image
-          src={"/avatar_image.png"}
+          src={
+            localAvatar ??
+            user?.avatarUrl ??
+            "https://ftp.goit.study/img/common/women-default-avatar.jpg"
+          }
           alt={"user avatar"}
           height={132}
           width={132}
