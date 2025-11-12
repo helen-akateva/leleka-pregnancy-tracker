@@ -43,7 +43,7 @@ export default function ProfileAvatar() {
           setLocalAvatar(updatedUser.avatarUrl);
           setError("");
         } else {
-          setError("Не вдалося отримати оновлений аватар");
+          // setError("Не вдалося отримати оновлений аватар");
         }
       } catch (err) {
         console.error(err);

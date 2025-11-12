@@ -10,9 +10,8 @@ import {
   FormikHelpers,
 } from "formik";
 import styles from "./ProfileEditForm.module.css";
-import { useId } from "react";
+import { useId, useMemo, useState } from "react";
 import Select from "@/components/SelectComponent/Select";
-import { useState } from "react";
 import { useAuthStore } from "@/lib/store/authStore";
 import { updateUser } from "@/lib/api/clientApi";
 import { UserData } from "@/types/user";
@@ -36,7 +35,7 @@ export const profileValidationSchema = Yup.object({
   email: Yup.string()
     .email("Некоректна пошта")
     .required("Пошта є обов’язковою"),
-  gender: Yup.string()
+  babyGender: Yup.string()
     .oneOf(["Чоловіча", "Жіноча", "Невідомо", ""], "Оберіть стать")
     .required("Оберіть стать"),
   dueDate: Yup.string().required("Оберіть дату"),
@@ -50,7 +49,31 @@ export default function ProfileEditForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // мапа з UI значення -> бекенд енум
+  // Опції для селекту — детерміновані і стабільні
+  const genderOptions: GenderOption[] = useMemo(
+    () => [
+      { value: "Чоловіча", label: "Хлопчик" },
+      { value: "Жіноча", label: "Дівчинка" },
+      { value: "Невідомо", label: "Ще не знаю" },
+    ],
+    []
+  );
+
+  // Стабільні initialValues, використовують дані user якщо є
+  const initialValues = useMemo<ProfileFormValues>(
+    () => ({
+      name: user?.name ?? "",
+      email: user?.email ?? "",
+      babyGender:
+        (user?.babyGender === "boy" && "Чоловіча") ||
+        (user?.babyGender === "girl" && "Жіноча") ||
+        (user?.babyGender === "unknown" && "Невідомо") ||
+        "",
+      dueDate: user?.dueDate ?? "",
+    }),
+    [user]
+  );
+
   const mapBabyGenderToBackend = (g: Gender): "girl" | "boy" | "unknown" => {
     if (g === "Чоловіча") return "boy";
     if (g === "Жіноча") return "girl";
@@ -66,25 +89,20 @@ export default function ProfileEditForm() {
     setSubmitting(true);
 
     try {
-      // Підготуйте payload відповідно до бекенду
       const payload: Record<string, unknown> = {
         name: values.name,
         email: values.email,
-        // бекенд чекає babyGender як "girl" | "boy" | "unknown"
         babyGender: mapBabyGenderToBackend(values.babyGender),
         dueDate: values.dueDate,
       };
-      console.log(payload);
-      // Виклик API через Next.js proxy (updateUser)
+
       const updatedUser = await updateUser(payload);
 
-      // Оновлюємо локальний Zustand-юзер (мердж з повернутими даними)
       setUser({ ...user, ...updatedUser } as UserData);
 
       setSuccessMessage("Профіль успішно оновлено");
     } catch (err: unknown) {
       let message = "Помилка при збереженні";
-      console.log(submitError, successMessage);
       if (typeof err === "string") {
         message = err;
       } else if (err && typeof err === "object") {
@@ -94,7 +112,6 @@ export default function ProfileEditForm() {
         };
         message = e.response?.data?.message ?? e.message ?? message;
       }
-
       setSubmitError(message);
     } finally {
       setSubmitting(false);
@@ -103,142 +120,171 @@ export default function ProfileEditForm() {
 
   return (
     <Formik
-      initialValues={{ name: "", email: "", babyGender: "", dueDate: "" }}
+      enableReinitialize
+      initialValues={initialValues}
       validationSchema={profileValidationSchema}
       onSubmit={handleSubmit}
     >
       {({ resetForm, isSubmitting }) => (
-        <Form className={styles.profileform}>
-          <div className={styles.profilefield}>
-            <label htmlFor="name" className={styles.profilelabel}>
-              Ім’я
-            </label>
-            <Field name="name">
-              {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
-                <input
-                  {...field}
-                  type="text"
-                  placeholder="Ім'я зареєстрованого користувача"
-                  id={`${fieldId}-username`}
-                  className={`${styles.profileinput} ${
-                    meta.touched && meta.error ? styles.inputError : ""
-                  }`}
-                />
-              )}
-            </Field>
-            <ErrorMessage
-              name="name"
-              component="div"
-              className={styles.error}
-            />
-          </div>
-          <div className={styles.profilefield}>
-            <label htmlFor="email" className={styles.profilelabel}>
-              Пошта
-            </label>
-            <Field name="email">
-              {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
-                <input
-                  {...field}
-                  type="email"
-                  placeholder="Пошта зареєстрованого користувача"
-                  id={`${fieldId}-useremail`}
-                  className={`${styles.profileinput} ${
-                    meta.touched && meta.error ? styles.inputError : ""
-                  }`}
-                />
-              )}
-            </Field>
-            <ErrorMessage
-              name="email"
-              component="div"
-              className={styles.error}
-            />
-          </div>
-          <div className={styles.profilefield}>
-            <label htmlFor="gender" className={styles.profilelabel}>
-              Стать дитини
-            </label>
+        <>
+          {submitError && <div className={styles.error}>{submitError}</div>}
+          {successMessage && (
+            <div className={styles.success}>{successMessage}</div>
+          )}
 
-            <Field name="gender">
-              {({
-                field,
-                form,
-                meta,
-              }: FieldProps<Gender, ProfileFormValues>) => {
-                const options: GenderOption[] = [
-                  { value: "Чоловіча", label: "Хлопчик" },
-                  { value: "Жіноча", label: "Дівчинка" },
-                  { value: "Невідомо", label: "Ще не знаю" },
-                ];
-
-                const loadOptions = (
-                  _inputValue: string,
-                  callback: (options: GenderOption[]) => void
-                ) => {
-                  callback(options);
-                };
-
-                const selectedOption =
-                  options.find((opt) => opt.value === field.value) || null;
-
-                return (
-                  <Select
-                    placeholder="Оберіть стать"
-                    name={field.name}
-                    loadOptions={loadOptions}
-                    value={selectedOption}
-                    closeMenuOnSelect
-                    onChange={(option) =>
-                      form.setFieldValue(field.name, option?.value)
-                    }
-                    onBlur={() => form.setFieldTouched(field.name)}
-                    hasError={meta.touched && !!meta.error}
+          <Form className={styles.profileform} noValidate>
+            <div className={styles.profilefield}>
+              <label
+                htmlFor={`${fieldId}-username`}
+                className={styles.profilelabel}
+              >
+                Ім’я
+              </label>
+              <Field name="name">
+                {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder="Ім'я зареєстрованого користувача"
+                    id={`${fieldId}-username`}
+                    className={`${styles.profileinput} ${
+                      meta.touched && meta.error ? styles.inputError : ""
+                    }`}
+                    aria-invalid={meta.touched && !!meta.error}
                   />
-                );
-              }}
-            </Field>
+                )}
+              </Field>
+              <ErrorMessage
+                name="name"
+                component="div"
+                className={styles.error}
+              />
+            </div>
 
-            <ErrorMessage
-              name="gender"
-              component="div"
-              className={styles.error}
-            />
-          </div>
-          <div className={styles.profilefield}>
-            <label htmlFor="dueDate" className={styles.profilelabel}>
-              Планова дата пологів
-            </label>
-            <Field name="dueDate">
-              {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
-                <input
-                  {...field}
-                  type="date"
-                  id={`${fieldId}-userDate`}
-                  className={`${styles.profileselectDate} ${
-                    meta.touched && meta.error ? styles.inputError : ""
-                  }`}
-                />
-              )}
-            </Field>
-          </div>
-          <div className={styles.profileactions}>
-            <button
-              type="button"
-              onClick={() => resetForm()}
-              className={styles.profilecancel}
-            >
-              Відмінити зміни
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={styles.profilesave}
-            >
-              Зберегти зміни
-            </button>
-          </div>
-        </Form>
+            <div className={styles.profilefield}>
+              <label
+                htmlFor={`${fieldId}-useremail`}
+                className={styles.profilelabel}
+              >
+                Пошта
+              </label>
+              <Field name="email">
+                {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
+                  <input
+                    {...field}
+                    type="email"
+                    placeholder="Пошта зареєстрованого користувача"
+                    id={`${fieldId}-useremail`}
+                    className={`${styles.profileinput} ${
+                      meta.touched && meta.error ? styles.inputError : ""
+                    }`}
+                    readOnly
+                    aria-readonly={true}
+                    aria-invalid={meta.touched && !!meta.error}
+                    // необов'язково: не дозволити фокус клавіатурою
+                    tabIndex={-1}
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <div className={styles.profilefield}>
+              <label
+                htmlFor={`${fieldId}-babyGender`}
+                className={styles.profilelabel}
+              >
+                Стать дитини
+              </label>
+
+              <Field name="babyGender">
+                {({
+                  field,
+                  form,
+                  meta,
+                }: FieldProps<Gender, ProfileFormValues>) => {
+                  const selectedOption =
+                    genderOptions.find((opt) => opt.value === field.value) ||
+                    null;
+
+                  // instanceId робить id стабільним між SSR/клієнтом
+                  return (
+                    <Select
+                      placeholder="Оберіть стать"
+                      name={field.name}
+                      instanceId={`${fieldId}-babyGender`}
+                      inputId={`${fieldId}-babyGender-input`}
+                      loadOptions={(input, cb) => cb(genderOptions)}
+                      value={selectedOption}
+                      closeMenuOnSelect
+                      onChange={(option) =>
+                        form.setFieldValue(field.name, option?.value ?? "")
+                      }
+                      onBlur={() => form.setFieldTouched(field.name, true)}
+                      hasError={meta.touched && !!meta.error}
+                      options={genderOptions}
+                    />
+                  );
+                }}
+              </Field>
+
+              <ErrorMessage
+                name="babyGender"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <div className={styles.profilefield}>
+              <label
+                htmlFor={`${fieldId}-userDate`}
+                className={styles.profilelabel}
+              >
+                Планова дата пологів
+              </label>
+              <Field name="dueDate">
+                {({ field, meta }: FieldProps<string, ProfileFormValues>) => (
+                  <input
+                    {...field}
+                    type="date"
+                    id={`${fieldId}-userDate`}
+                    className={`${styles.profileselectDate} ${
+                      meta.touched && meta.error ? styles.inputError : ""
+                    }`}
+                    aria-invalid={meta.touched && !!meta.error}
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="dueDate"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <div className={styles.profileactions}>
+              <button
+                type="button"
+                onClick={() => resetForm()}
+                className={styles.profilecancel}
+                disabled={isSubmitting}
+              >
+                Відмінити зміни
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={styles.profilesave}
+              >
+                {isSubmitting ? "Зберігання..." : "Зберегти зміни"}
+              </button>
+            </div>
+          </Form>
+        </>
       )}
     </Formik>
   );
