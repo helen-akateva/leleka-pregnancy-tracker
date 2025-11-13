@@ -46,6 +46,7 @@ export default function DiaryEntryDetails() {
     if (!id) return;
     deleteMutation.mutate(id);
     setSelectedNote(null);
+    router.push("/diary");
   };
   const handleConfirm = () => {
     handleDelete(note._id);
