@@ -47,7 +47,9 @@ export default function TaskReminderCard() {
     <div className={styles.section}>
       <div className={styles.header}>
         <h2>Важливі завдання</h2>
-        <button onClick={handleAddTaskClick}>＋</button>
+        <button className={styles.addButton} onClick={handleAddTaskClick}>
+          ＋
+        </button>
       </div>
 
       {tasks.length === 0 ? (

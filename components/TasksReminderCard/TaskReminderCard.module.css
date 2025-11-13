@@ -55,15 +55,14 @@
   list-style: none;
 }
 
-
-
 .taskItem {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   display: flex;
   flex-direction: column;
   gap: 2px;
   transition: all 0.2s ease;
   margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .taskItem.done .taskName {
@@ -122,7 +121,7 @@
 .taskDate {
   font-family: var(--font-family);
   font-weight: 400;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
   color: var(--color-neutral-darkest);
   margin-left: 25px;
@@ -135,9 +134,12 @@
 }
 
 .taskName {
-  font-size: 12px;
-  color: var(--color-neutral-darkest);
+  font-family: var(--font-family);
   font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000;
+  color: var(--color-neutral-darkest);
 }
 
 .done .taskName {
@@ -147,7 +149,7 @@
 }
 
 .emptyState {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -157,7 +159,7 @@
 }
 
 .emptyTitle {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   font-weight: 700;
   font-size: 14px;
   line-height: 1.6;
@@ -165,7 +167,7 @@
 }
 
 .emptySubtitle {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
@@ -174,7 +176,7 @@
 }
 
 .createButton {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   font-weight: 500;
   font-size: 14px;
   line-height: 1;
@@ -192,14 +194,14 @@
 
 .createButton:hover {
   background: var(--color-scheme-background);
-    border-bottom: 4px solid var(--color-scheme-border);
+  border-bottom: 4px solid var(--color-scheme-border);
 }
 
 .createButton:focus-visible {
   border-bottom: 4px solid var(--opacity-neutral-darkest-15);
-    background: var(--color-scheme-foreground);
-  }
-.createButton:active{
+  background: var(--color-scheme-foreground);
+}
+.createButton:active {
   background: var(--color-scheme-accent);
 }
 
@@ -207,7 +209,6 @@
   .section {
     max-width: 704px;
     height: auto;
-   
   }
 }
 
@@ -218,10 +219,9 @@
     height: 498px;
     margin-bottom: 0;
   }
-.taskList{
-  overflow-y: auto;
-}
-
+  .taskList {
+    overflow-y: auto;
+  }
 
   .header h2 {
     font-size: 24px;
@@ -240,9 +240,28 @@
     font-size: 16px;
   }
 
-  .createButton{
+  .createButton {
     width: 191px;
-      height: 46px;
-      font-size: 16px;
+    height: 46px;
+    font-size: 16px;
   }
+}
+
+.addButton {
+  all: unset;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 50%;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background: none !important;
+  transform: none !important;
 }
