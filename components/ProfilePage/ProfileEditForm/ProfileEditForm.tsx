@@ -239,7 +239,7 @@ export default function ProfileEditForm() {
                   {({ field, meta }: FieldProps<string, ProfileFormValues>) => {
                     const today = new Date().toISOString().slice(0, 10);
                     const maxDate = new Date();
-                    maxDate.setFullYear(maxDate.getFullYear() + 1);
+                    maxDate.setMonth(maxDate.getMonth() + 9);
                     const max = maxDate.toISOString().slice(0, 10);
 
                     return (
