@@ -2,12 +2,10 @@
   margin: 0 auto;
   display: flex;
   height: 100vh;
-  justify-content: center;
 }
 
 @media only screen and (min-width: 1440px) {
   .main {
-    justify-content: center;
     overflow-x: hidden;
     height: 100%;
   }

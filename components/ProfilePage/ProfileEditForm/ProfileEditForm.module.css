@@ -120,14 +120,14 @@
   line-height: 1.6;
   color: #000;
   font-family: "Lato", sans-serif;
+  width: 159px;
+  height: 38px;
 }
 
 .profilecancel {
   border-bottom: 4px solid var(--opacity-neutral-darkest-15);
   border-radius: 100px;
   padding: 8px 20px;
-  max-width: 159px;
-  height: 38px;
   background: var(--opacity-neutral-darkest-5);
   font-family: var(--font-family);
   font-weight: 500;
@@ -137,14 +137,16 @@
 }
 
 @media screen and (min-width: 768px) {
-  .profilecancel {
-    max-width: 150px;
+  .profilecancel,
+  .profilesave {
+    width: 150px;
   }
 }
 
 @media screen and (min-width: 1440px) {
-  .profilecancel {
-    max-width: 165px;
+  .profilecancel,
+  .profilesave {
+    width: 165px;
     height: 42px;
   }
 }
@@ -153,22 +155,8 @@
   border-bottom: 4px solid #ffcbd3;
 
   padding: 8px 20px;
-  max-width: 159px;
-  height: 38px;
+
   background-color: #ffdae0;
-}
-
-@media screen and (min-width: 768px) {
-  .profilesave {
-    max-width: 140px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .profilesave {
-    max-width: 149px;
-    height: 42px;
-  }
 }
 
 .profilesave:hover,

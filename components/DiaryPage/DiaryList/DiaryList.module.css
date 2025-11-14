@@ -11,6 +11,7 @@
   padding: 24px 16px;
   width: 335px;
   background: var(--color-scheme-foreground);
+  margin-bottom: 32px;
 }
 
 .diary-list-header {
